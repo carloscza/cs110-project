@@ -1,0 +1,24 @@
+{
+  commentid: 1,
+  reviewid: 9,
+  userid: 3,
+  comment: "This is my 3 comment."
+},
+{
+  commentid: 2,
+  reviewid: 3,
+  userid: 1,
+  comment: "This is my 1 comment."
+},
+{
+  commentid: 3,
+  reviewid: 3,
+  userid: 2,
+  comment: "This is my 2 comment."
+},
+{
+  commentid: 4,
+  reviewid: 8,
+  userid: 1,
+  comment: "This is my 1 comment."
+},

@@ -1,0 +1,73 @@
+.profile-review-container
+{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
+    background-color: rgb(43, 39, 51);
+    padding: 12px;
+    border-bottom: 2px solid #1c171c;
+}
+
+.review-details-container
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-review-rating
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.profile-comments
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-album-cover
+{
+    height: 136px;
+    width: auto;
+    border-radius: 5px;
+}
+
+.profile-album-title
+{
+    font-size: 20px;
+    text-align: left;
+    font-weight: bold;
+    margin: 0;
+}
+
+.profile-star-icon
+{
+    color: orange;
+    margin: 0;
+}
+
+.profile-review-text
+{
+    margin: 0;
+    font-weight: bold;
+}
+
+.profile-comments-text
+{
+    margin: 0;
+    font-size: 12px;
+}
+
+.profile-review-snipper-text
+{
+    margin: 0;
+    margin-bottom: 12px;
+    font-size: 12px;
+}

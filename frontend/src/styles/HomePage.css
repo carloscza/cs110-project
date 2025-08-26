@@ -1,0 +1,115 @@
+.home-page-container
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.home-banner-container
+{
+  display: flex;
+  flex-direction: column;
+  margin-top: 28px;
+}
+
+.banner-img
+{
+  width: 800px;
+  height: auto;
+  margin: 0;
+  background: none;
+  mask: linear-gradient(to bottom, transparent 0%, black 3%, black 97%, transparent 100%);
+  -webkit-mask: linear-gradient(to bottom, transparent 0%, black 3%, black 97%, transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+
+.home-banner-text-container
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 180px;
+  width: 800px;
+  background-color: rgba(0, 0, 0, 0.8); 
+  position: absolute;
+  top: 380px;
+}
+
+.home-banner-main-text
+{
+  margin: 0;
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.home-banner-sub-text
+{
+  margin: 0;
+  font-size: 20px;
+}
+
+.list-container
+{
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  margin-top: 28px;
+}
+
+.list-heading-text
+{
+  margin: 0;
+  text-align: left;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.list-subtext
+{
+  text-align: left;
+  margin: 0;
+
+}
+
+.album-list-container
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 850px;
+  margin-top: 16px;
+}
+
+.album-list-arrows
+{
+    font-size: 24px;
+    color: rgb(122, 122, 122); 
+    opacity: 0.2;
+}
+
+.album-list-arrows:hover
+{
+    cursor: pointer;
+    opacity: 1;
+}
+
+.albums-list
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+  
+}
+
+.album-list-arrows.disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.album-list-arrows.disabled:hover {
+  color: #ccc; /* Don't change color on hover when disabled */
+}

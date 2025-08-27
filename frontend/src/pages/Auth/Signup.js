@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import '../../styles/Auth.css'; 
+import { useNavigate } from 'react-router-dom';
 
-function Signup() {
+function Signup({ setIsLoggedIn }) {
   const [formData, setFormData] = useState({
     email: '',
     username: '',
@@ -11,6 +12,7 @@ function Signup() {
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData(prev => ({
@@ -45,6 +47,11 @@ function Signup() {
       if (!response.ok) {
         throw new Error(data.message || 'Signup failed');
       }
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      setIsLoggedIn(true);
+      navigate('/profile');
 
       setError('');
       setSuccess('Signup successful! You can now log in.');

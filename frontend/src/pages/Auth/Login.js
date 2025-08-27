@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import '../../styles/Auth.css'; 
 import { useNavigate } from 'react-router-dom';
 
-function Login() {
-  const [formData, setFormData] = useState({ email: '', password: '' });
+function Login({ setIsLoggedIn }) {
+  const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -26,6 +26,7 @@ function Login() {
 
       console.log('Login success:', data);
       localStorage.setItem('token', data.token);
+      setIsLoggedIn(true);
       localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/profile');
       setError('');
@@ -41,7 +42,7 @@ function Login() {
       <h2>Login</h2>
       {error && <p className="auth-error">{error}</p>}
       <form onSubmit={handleSubmit} className="auth-form">
-        <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
+        <input type="text" name="username" placeholder="Username" value={formData.username} onChange={handleChange} required />
         <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
         <button type="submit">Log In</button>
       </form>

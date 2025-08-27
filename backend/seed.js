@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 
 // Replace with your MongoDB Atlas connection string here:
-const url = 'mongodb+srv://carrloscarranza:qzoBZDBPy458O7Q7@trackboxd.fwcql8l.mongodb.net/?retryWrites=true&w=majority&appName=trackboxd';
+const url = 'mongodb+srv://gabrielsanchez:YGx3STqsO8Kf725I@trackboxd.fwcql8l.mongodb.net/?retryWrites=true&w=majority&appName=trackboxd';
 
 const client = new MongoClient(url);
 const dbName = 'trackboxdDB';

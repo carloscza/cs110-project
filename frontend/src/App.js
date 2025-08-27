@@ -7,6 +7,9 @@ import HomePage from './containers/HomePage';
 import ProfilePage from './containers/ProfilePage';
 import profilepic from './profilepic.png';
 
+import Login from './pages/Auth/Login';
+import Signup from './pages/Auth/Signup';
+
 
 function App() {
   return (
@@ -19,6 +22,8 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/profile" element={<ProfilePage profilePic={profilepic} username={"user123"} reviewsCnt={"7"} followersCnt={"1"} followingCnt={"123"} about={"hello trackboxd"} />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
             </Routes>
           </div>
         </div>

@@ -1,0 +1,102 @@
+.profile-container
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.profile-header-container
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.user
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-pic
+{
+    border-radius: 50%;
+    height: 68px;       
+    object-fit: cover;     
+    object-position: center; 
+
+}
+
+.profile-bold-text
+{
+    margin: 0;
+    font-weight: bold;
+}
+
+.profile-stats
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.statss
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.stat-text
+{
+    margin: 0;
+}
+
+.user-profile-about
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    width: 100%;
+    padding-left: 28px;
+    margin-bottom: 10px;
+
+}
+
+.about
+{
+    margin: 0;
+    text-align: left;
+    font-size: 16px;
+}
+
+hr 
+{
+    width: 95%;
+    height: 2px;           
+    background-color: rgb(158, 138, 198); 
+    margin: 20px 0;        
+}
+
+.profile-reviews-container
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    width: 100%;
+    padding: 20px;
+}

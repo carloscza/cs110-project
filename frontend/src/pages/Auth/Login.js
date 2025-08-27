@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import '../../styles/Auth.css'; 
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -12,7 +14,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3001/api/auth/login', {
+      const response = await fetch('http://localhost:3001/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -23,7 +25,11 @@ function Login() {
       if (!response.ok) throw new Error(data.message || 'Login failed');
 
       console.log('Login success:', data);
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      navigate('/profile');
       setError('');
+
       // TODO: store token, redirect, etc.
     } catch (err) {
       setError(err.message);

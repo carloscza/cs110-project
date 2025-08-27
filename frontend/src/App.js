@@ -21,7 +21,7 @@ function App() {
           <div className="Content">
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/profile" element={<ProfilePage profilePic={profilepic} username={"user123"} reviewsCnt={"7"} followersCnt={"1"} followingCnt={"123"} about={"hello trackboxd"} />} />
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
             </Routes>

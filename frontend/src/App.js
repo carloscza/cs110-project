@@ -10,21 +10,38 @@ import PostsPage from './containers/PostsPage';       // <-- ADDED
 
 import profilepic from './profilepic.png';
 
+import Login from './pages/Auth/Login';
+import Signup from './pages/Auth/Signup';
+import React, { useState, useEffect } from 'react';
+
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
   return (
     <Router>
         <div className="App">
           <header className="Header">
-            <NavBar />
+            <NavBar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
           </header>
           <div className="Content">
             <Routes>
               {/* --- UPDATED ROUTES --- */}
               <Route path="/" element={<HomePage />} />
+
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+              <Route path="/signup" element={<Signup setIsLoggedIn={setIsLoggedIn} />} />
+
               <Route path="/activity" element={<ActivityPage />} /> {/* <-- ADDED */}
               <Route path="/posts" element={<PostsPage />} />       {/* <-- ADDED */}
               <Route path="/profile" element={<ProfilePage profilePic={profilepic} username={"user123"} reviewsCnt={"7"} followersCnt={"1"} followingCnt={"123"} about={"hello trackboxd"} />} />
+
             </Routes>
           </div>
         </div>

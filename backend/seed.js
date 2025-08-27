@@ -1,10 +1,11 @@
+require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
 // Replace with your MongoDB Atlas connection string here:
-const url = 'mongodb+srv://carrloscarranza:qzoBZDBPy458O7Q7@trackboxd.fwcql8l.mongodb.net/?retryWrites=true&w=majority&appName=trackboxd';
+const url = process.env.MONGODB_URI;
 
 const client = new MongoClient(url);
-const dbName = 'trackboxdDB';
+const dbName = process.env.DB_NAME;
 
 // SEED DATA
 const albumsSeed = [

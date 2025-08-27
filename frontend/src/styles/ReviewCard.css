@@ -1,0 +1,50 @@
+
+.album-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 150px; 
+  margin: 0 5px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.album-container:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.album-cover {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #333; 
+}
+
+.album-stats-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  color: #a0a0a0;
+}
+
+.stat .list-text {
+  margin: 0;
+  margin-left: 6px;
+  font-size: 14px;
+}
+
+.stat i {
+  font-size: 16px;
+}
+
+.star-icon {
+  color: #f5c518; 
+}

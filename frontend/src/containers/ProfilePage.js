@@ -1,4 +1,3 @@
-// ProfilePage.js
 
 import '../styles/ProfilePage.css'; 
 
@@ -95,5 +94,4 @@ function ProfilePage() {
     </div>
   );
 }
-
 export default ProfilePage;

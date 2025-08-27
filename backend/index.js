@@ -5,28 +5,29 @@ const { MongoClient } = require('mongodb');
 
 const app = express();
 const port = 3001;
+
 app.use(cors());
+
 app.use(express.json());//
 
-// --- MongoDB Connection ---
-// Replace with your MongoDB Atlas connection string
-// Use environment variable instead of hardcoded string
+
 const url = process.env.MONGODB_URI;
 const dbName = process.env.DB_NAME;
 
 const client = new MongoClient(url);
-let db; // Variable to hold the database connection
+let db; 
 
 async function connectToDb() {
   try {
     await client.connect();
     console.log('Connected successfully to MongoDB');
-    db = client.db(dbName); // Assign the database connection to our variable
+    db = client.db(dbName); 
   } catch (err) {
     console.error('Failed to connect to MongoDB', err);
-    process.exit(1); // Exit if we can't connect
+    process.exit(1); 
   }
 }
+
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -104,7 +105,70 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// GET all albums data
+
+
+// --- UPDATED: GET Activity Data ---
+// This now joins reviews with albums to get the cover image
+app.get('/api/activity', async (req, res) => {
+  try {
+    const collection = db.collection('reviews');
+    const activity = await collection.aggregate([
+      { $sort: { timestamp: -1 } }, // Sort by most recent first
+      { $limit: 20 },
+      {
+        // Join with the 'albums' collection
+        $lookup: {
+          from: 'albums',
+          localField: 'albumid', // Field from the 'reviews' collection
+          foreignField: 'albumid', // Field from the 'albums' collection
+          as: 'albumDetails' // Name for the new array field
+        }
+      },
+      { $unwind: '$albumDetails' }, // Deconstruct the array to an object
+      {
+        // Add the album cover to the final review object
+        $addFields: {
+          albumCover: '$albumDetails.cover'
+        }
+      }
+    ]).toArray();
+    res.json(activity);
+  } catch (err) {
+    console.error('Error fetching activity:', err);
+    res.status(500).json({ error: 'Failed to fetch activity' });
+  }
+});
+
+// --- UPDATED: GET Posts Data ---
+// This also joins reviews with albums to get the cover image
+app.get('/api/posts', async (req, res) => {
+  try {
+    const collection = db.collection('reviews');
+    const posts = await collection.aggregate([
+      {
+        $lookup: {
+          from: 'albums',
+          localField: 'albumid',
+          foreignField: 'albumid',
+          as: 'albumDetails'
+        }
+      },
+      { $unwind: '$albumDetails' },
+      {
+        $addFields: {
+          albumCover: '$albumDetails.cover'
+        }
+      }
+    ]).toArray();
+    res.json(posts);
+  } catch (err) {
+    console.error('Error fetching posts:', err);
+    res.status(500).json({ error: 'Failed to fetch posts' });
+  }
+});
+
+
+// --- Your other endpoints (albums, reviews, etc.) ---
 app.get('/api/albums', async (req, res) => {
   try {
     const collection = db.collection('albums');
@@ -116,61 +180,7 @@ app.get('/api/albums', async (req, res) => {
   }
 });
 
-// GET all reviews data
-app.get('/api/reviews', async (req, res) => {
-  try {
-    const collection = db.collection('reviews');
-    const reviews = await collection.find({}).toArray();
-    res.json(reviews);
-  } catch (err) {
-    console.error('Error fetching reviews:', err);
-    res.status(500).json({ error: 'Failed to fetch reviews' });
-  }
-});
 
-// GET all comments data
-app.get('/api/comments', async (req, res) => {
-  try {
-    const collection = db.collection('reviews');
-    const comments = await collection.find({}).toArray();
-    res.json(comments);
-  } catch (err) {
-    console.error('Error fetching comments:', err);
-    res.status(500).json({ error: 'Failed to fetch comments' });
-  }
-});
-
-// GET albums by genre
-app.get('/api/albums/genre/:genre', async (req, res) => {
-  try {
-    const collection = db.collection('albums');
-    const genre = req.params.genre;
-    const albums = await collection.find({ 
-      genre: { $regex: new RegExp(genre, 'i') } 
-    }).toArray();
-    
-    res.json(albums);
-  } catch (err) {
-    console.error('Error fetching albums by genre:', err);
-    res.status(500).json({ error: 'Failed to fetch albums by genre' });
-  }
-});
-
-// GET comments by review
-/*app.get('/api/comments/reviewid/:reviewid', async (req, res) => {
-  try {
-    const collection = db.collection('albums');
-    const genre = req.params.genre;
-    const albums = await collection.find({ 
-      genre: { $regex: new RegExp(genre, 'i') } 
-    }).toArray();
-    
-    res.json(albums);
-  } catch (err) {
-    console.error('Error fetching albums by genre:', err);
-    res.status(500).json({ error: 'Failed to fetch albums by genre' });
-  }
-});*/
 
 app.get('/api/comments/reviewid/:reviewid', async (req, res) => {
   try {
@@ -184,7 +194,8 @@ app.get('/api/comments/reviewid/:reviewid', async (req, res) => {
   }
 });
 
-// Start server after connecting to database
+
+// --- SERVER START ---
 async function startServer() {
   await connectToDb();
   
@@ -194,10 +205,3 @@ async function startServer() {
 }
 
 startServer();
-
-// Graceful shutdown
-process.on('SIGINT', async () => {
-  console.log('Shutting down gracefully...');
-  await client.close();
-  process.exit(0);
-});

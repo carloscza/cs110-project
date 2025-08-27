@@ -1,4 +1,3 @@
-// ProfilePage.js
 
 import '../styles/ProfilePage.css'; 
 
@@ -46,5 +45,4 @@ function ProfilePage({profilePic, username, reviewsCnt, followersCnt, followingC
         </div>
     );
 }
-
 export default ProfilePage;

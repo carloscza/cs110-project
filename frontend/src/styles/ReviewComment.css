@@ -1,0 +1,43 @@
+.review-comment-container
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.review-comment-author-container
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.review-comment-user-pic
+{
+    height: 20px;
+    width: auto;
+    border-radius: 50%;
+    object-fit: cover;     
+    object-position: center; 
+    margin: 0;
+}
+
+.review-comment-username-text
+{
+    font-size: 10px;
+    margin: 0;
+    width: 120px;
+    text-align: left;
+}
+
+.review-comment-text
+{
+    font-size: 10px;
+    margin: 0;
+}

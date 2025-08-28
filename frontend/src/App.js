@@ -8,6 +8,11 @@ import ProfilePage from './containers/ProfilePage';
 import ActivityPage from './containers/ActivityPage'; // <-- ADDED
 import PostsPage from './containers/PostsPage';       // <-- ADDED
 
+import ReviewPage from './containers/ReviewPage';
+import AlbumReviewsPage from './containers/AlbumReviewsPage';
+import PostReviewPage from './containers/PostReviewPage';
+import CreateReviewPage from './containers/CreateReviewPage';
+
 import profilepic from './profilepic.png';
 
 import Login from './pages/Auth/Login';
@@ -41,6 +46,12 @@ function App() {
               <Route path="/activity" element={<ActivityPage />} /> {/* <-- ADDED */}
               <Route path="/posts" element={<PostsPage />} />       {/* <-- ADDED */}
               <Route path="/profile" element={<ProfilePage profilePic={profilepic} username={"user123"} reviewsCnt={"7"} followersCnt={"1"} followingCnt={"123"} about={"hello trackboxd"} />} />
+
+              <Route path="/reviewpage/:reviewId/:albumId" element={<ReviewPage isLoggedIn={isLoggedIn} />} /> {/* <-- ADDED */}
+              <Route path="/albumreviewpage/:albumId" element={<AlbumReviewsPage />} />       {/* <-- ADDED */}
+              <Route path="/postreview" element={<PostReviewPage />} />       {/* <-- ADDED */}
+              <Route path="/createreview/:albumId" element={<CreateReviewPage />} />       {/* <-- ADDED */}
+              
 
             </Routes>
           </div>

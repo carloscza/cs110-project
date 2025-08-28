@@ -1,0 +1,164 @@
+.search-album-container
+{
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 380px;
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  gap: 8px;
+}
+
+.new-review-heading
+{
+  font-size: 24px;
+  text-align: left;
+  margin: 0;
+  font-weight: bold;
+}
+
+.search-album-heading
+{
+  text-align: left;
+  margin: 0;
+}
+
+.form-search-album
+{
+  display: flex;
+  flex-direction: row;
+  margin-top: 8px;
+  gap: 4px;
+}
+
+.search-album-input
+{
+  border-radius: 2px;
+  border: 2px solid transparent;
+  width: 400px;
+}
+
+.search-album-button
+{
+    border-radius: 2px;
+  border: 2px solid transparent;
+  font-weight: bold;
+}
+ 
+.album-results-grid
+{
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.album-result-cover
+{
+  height: 100px;
+  width: auto;
+}
+.album-result-cover:hover
+{
+  cursor: pointer;
+}
+
+.album-result-card
+{
+  display: flex;
+  flex-direction: row;
+}
+
+.search-box-btn-container
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap:8px;
+}
+
+.suggestions-drop-list
+{
+  justify-self: left;
+  text-align: left;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.box-btn-drop-cont
+{
+  display: flex;
+  flex-direction: column;
+}
+.asdf
+{
+  position: relative;
+}
+
+.suggestions-drop-list 
+{
+  position: absolute;  
+  top: 100%;          
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0 0;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 10;
+  color: black;
+  width: 400px;
+
+}
+
+.suggestions-drop-list li 
+{
+  padding: 4px;
+  cursor: pointer;
+}
+
+.suggestions-drop-list li:hover 
+{
+
+  background-color: #f0f0f0;
+}
+
+.error-text
+{
+  margin-top: 36px;
+}
+
+.album-info
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 36px;
+}
+
+.album-cover-preview
+{
+  width: 350px;
+  height: auto;
+}
+
+.create-review-btn
+{
+  margin-top: 12px;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  background-color: rgb(59, 59, 156);
+  color: white;
+  padding: 8px;
+  font-weight: bold;
+
+
+
+}

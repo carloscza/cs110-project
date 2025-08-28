@@ -19,16 +19,18 @@ function NavBar({ isLoggedIn, setIsLoggedIn }) {
       </Link>
       <ul className="nav-links-container">
         <li><Link to="/" className="nav-link">HOME</Link></li>
-        <li><Link to="/profile" className="nav-link">PROFILE</Link></li>
         
         {isLoggedIn ? (
+          <>
+          <li><Link to="/profile" className="nav-link">PROFILE</Link></li>
           <li><button onClick={handleLogout} className="nav-link-button">LOGOUT</button></li>
+          <li className="post-btn"><Link to="/postreview" className="nav-link">+ POST</Link></li>
+          </>
         ) : (
           <>
             <li><Link to="/login" className="nav-link">LOGIN</Link></li>
             <li><Link to="/signup" className="nav-link">SIGNUP</Link></li>
             <li><Link to="/activity" className="nav-link">ACTIVITY</Link></li>
-            <li><Link to="/posts" className="nav-link">POSTS</Link></li>
           </>
         )}
       </ul>

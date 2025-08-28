@@ -1,11 +1,18 @@
-// AlbumList.js
+// Entry.js
 
 import '../styles/AlbumList.css';
 
-function Entry({key, albumId, albumCover, rating, reviews})
-{
+import { useNavigate } from 'react-router-dom';
+
+function Entry({key, albumId, albumCover, rating, reviewsa}) {
+    const navigate = useNavigate();
+
+    const handleAlbumClick = () => {
+        navigate(`/albumreviewpage/${albumId}`);
+    };
+
     return (
-        <div className="album-container">
+        <div key={key} className="album-container" onClick={handleAlbumClick}>
             <img src={albumCover} alt="let god" className="album-cover" />
 
             <div className="album-stats-container">
@@ -16,7 +23,7 @@ function Entry({key, albumId, albumCover, rating, reviews})
 
                 <div className="stat">
                     <i className="bi bi-pencil-square"></i>
-                    <p className="list-text">{reviews}</p>
+                    <p className="list-text">{reviewsa}</p>
                 </div>
             </div>
         </div>

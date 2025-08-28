@@ -5,6 +5,7 @@ const { MongoClient } = require('mongodb');
 
 const app = express();
 const port = 3001;
+const { OAuth2Client } = require('google-auth-library');
 
 app.use(cors());
 
@@ -103,6 +104,58 @@ app.post('/api/login', async (req, res) => {
   } catch (err) {
     console.error('Login error:', err);
     res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
+
+app.post('/api/google-login', async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    const ticket = await googleClient.verifyIdToken({
+      idToken: token,
+      audience: GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { sub: googleId, email, name } = payload;
+
+    const usersCollection = db.collection('users');
+    let user = await usersCollection.findOne({ googleId });
+
+    if (!user) {
+      user = {
+        userid: Date.now(),
+        googleId,
+        email,
+        username: name,
+        userpic: '',
+        followers: [],
+        following: []
+      };
+      await usersCollection.insertOne(user);
+    }
+
+    const jwtToken = jwt.sign(
+      { userid: user.userid, username: user.username },
+      JWT_SECRET,
+      { expiresIn: '2h' }
+    );
+
+    res.status(200).json({
+      message: 'Google login successful',
+      token: jwtToken,
+      user: {
+        userid: user.userid,
+        username: user.username,
+        userpic: user.userpic
+      }
+    });
+  } catch (err) {
+    console.error('Google login error:', err);
+    res.status(401).json({ message: 'Google authentication failed' });
   }
 });
 

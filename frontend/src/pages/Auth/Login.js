@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../../styles/Auth.css'; 
 import { useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 
 function Login({ setIsLoggedIn }) {
   const [formData, setFormData] = useState({ username: '', password: '' });
@@ -46,6 +47,37 @@ function Login({ setIsLoggedIn }) {
         <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
         <button type="submit">Log In</button>
       </form>
+
+      <div className="google-login">
+      <p>or</p>
+      <GoogleLogin
+        onSuccess={async (credentialResponse) => {
+          const token = credentialResponse.credential;
+          try {
+            const res = await fetch('http://localhost:3001/api/google-login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ token }),
+            });
+
+          const data = await res.json();
+
+          if (!res.ok) throw new Error(data.message || 'Google login failed');
+
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          setIsLoggedIn(true);
+          navigate('/profile');
+        } catch (err) {
+          console.error(err);
+          setError(err.message);
+        }
+        }}
+        onError={() => {
+          console.log("Google login failed");
+        }}
+      />
+    </div>
     </div>
   );
 }

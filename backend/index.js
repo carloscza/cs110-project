@@ -361,20 +361,18 @@ app.get('/api/review/:reviewid/user', async (req, res) => {
     
     const reviewId = parseInt(req.params.reviewid);
     
-    // First, get the review to find the userid
     const review = await reviewsCollection.findOne({ reviewid: reviewId });
     
     if (!review) {
       return res.status(404).json({ error: 'Review not found' });
     }
     
-    // Then, get the user but exclude sensitive fields
     const user = await usersCollection.findOne(
       { userid: review.userid },
       { 
         projection: { 
-          password: 0,    // Exclude password
-          _id: 0          // Optionally exclude MongoDB _id
+          password: 0,    
+          _id: 0          
         } 
       }
     );
@@ -427,7 +425,7 @@ app.get('/api/comments/review/:reviewid', async (req, res) => {
       },
       {
         $project: {
-          userInfo: 0  // Remove the array
+          userInfo: 0  
         }
       }
     ]).toArray();
@@ -484,7 +482,6 @@ app.get('/api/albums/search', async (req, res) => {
 
     const collection = db.collection('albums');
     
-    // Case-insensitive search using regex
     const albums = await collection.find({
       title: { $regex: title, $options: 'i' }
     }).toArray();
@@ -595,7 +592,7 @@ app.get('/api/albums/with-reviews/genre/:genre', async (req, res) => {
         $group: {
           _id: "$album.albumid",
           overallrating: { $avg: "$rating" },
-          reviewscnt: { $sum: 1 },       // <-- count reviews
+          reviewscnt: { $sum: 1 },       
           title: { $first: "$album.title" },
           cover: { $first: "$album.cover" },
           artist: { $first: "$album.artist" },
@@ -643,12 +640,30 @@ app.get('/api/albums/:albumid/reviews', async (req, res) => {
   }
 });
 
+
+// GET search for user using 'username'. Returns and array of partial matches based on query (limit is 20 results).
+app.get('/api/search-user/by-username/', async (req, res) => {
+  const query = req.query.username;
+  if (!query) { return res.status(400).send('An username query parameter is required.'); }
+
+  try {
+    const result = await db.collection('users').find(
+            { username:   { $regex: query, $options: 'i'} },
+            { projection: { password : 0} }
+      ).limit(20).toArray();
+    res.json(result);
+  } catch (err) {
+    console.log("Error searching for user by username.", err);
+    res.status(500).json({error: 'Failed to search for user by username'});
+  }
+});
+
+
 // GET album by title
 app.get('/api/albums/search/:title', async (req, res) => {
   try {
     const title = req.params.title;
 
-    // Search for the album in the database (case-insensitive)
     const album = await db.collection('albums').findOne({
       title: { $regex: new RegExp(`^${title}$`, 'i') } 
     });
@@ -665,13 +680,15 @@ app.get('/api/albums/search/:title', async (req, res) => {
 });
 
 
+
+
 // GET albums by partial title for suggestions
 app.get('/api/albums/search-suggest/:query', async (req, res) => {
   try {
     const query = req.params.query;
     const results = await db.collection('albums')
-      .find({ title: { $regex: query, $options: 'i' } }) // i = ignore case
-      .limit(5) // limit to top 5 suggestions
+      .find({ title: { $regex: query, $options: 'i' } }) 
+      .limit(5) 
       .toArray();
 
     res.json(results);
@@ -680,6 +697,131 @@ app.get('/api/albums/search-suggest/:query', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch suggestions' });
   }
 });
+
+
+
+
+
+
+// POST follow/unfollow user endpoint
+app.post('/api/users/follow', async (req, res) => {
+  const { currentUserId, targetUserId, action } = req.body;
+
+  if (!currentUserId || !targetUserId || !action) {
+    return res.status(400).json({ 
+      error: 'currentUserId, targetUserId, and action are required' 
+    });
+  }
+
+  if (action !== 'follow' && action !== 'unfollow') {
+    return res.status(400).json({ 
+      error: 'action must be either "follow" or "unfollow"' 
+    });
+  }
+
+  if (currentUserId === targetUserId) {
+    return res.status(400).json({ 
+      error: 'Users cannot follow themselves' 
+    });
+  }
+
+  try {
+    const session = db.client.startSession();
+    
+    await session.withTransaction(async () => {
+      const usersCollection = db.collection('users');
+
+      const [currentUser, targetUser] = await Promise.all([
+        usersCollection.findOne({ userid: currentUserId }),
+        usersCollection.findOne({ userid: targetUserId })
+      ]);
+
+      if (!currentUser) {
+        throw new Error('Current user not found');
+      }
+      if (!targetUser) {
+        throw new Error('Target user not found');
+      }
+
+      if (action === 'follow') {
+        if (currentUser.following && currentUser.following.includes(targetUserId)) {
+          throw new Error('Already following this user');
+        }
+
+        await usersCollection.updateOne(
+          { userid: currentUserId },
+          { $addToSet: { following: targetUserId } }
+        );
+
+        await usersCollection.updateOne(
+          { userid: targetUserId },
+          { $addToSet: { followers: currentUserId } }
+        );
+
+      } else { // unfollow
+        if (!currentUser.following || !currentUser.following.includes(targetUserId)) {
+          throw new Error('Not following this user');
+        }
+
+        await usersCollection.updateOne(
+          { userid: currentUserId },
+          { $pull: { following: targetUserId } }
+        );
+
+        await usersCollection.updateOne(
+          { userid: targetUserId },
+          { $pull: { followers: currentUserId } }
+        );
+      }
+    });
+
+    await session.endSession();
+
+    res.json({ 
+      success: true, 
+      message: `Successfully ${action}ed user`,
+      action: action
+    });
+
+  } catch (error) {
+    console.error(`Error ${action}ing user:`, error);
+    
+    if (error.message.includes('not found') || 
+        error.message.includes('Already following') || 
+        error.message.includes('Not following')) {
+      return res.status(400).json({ error: error.message });
+    }
+    
+    res.status(500).json({ error: `Failed to ${action} user` });
+  }
+});
+
+
+// GET user by userid
+app.get('/api/user/:userid', async (req, res) => {
+  const userid = parseInt(req.params.userid);
+  
+  if (!userid) {
+    return res.status(400).json({ error: 'User ID is required' });
+  }
+
+  try {
+    const user = await db.collection('users').findOne(
+      { userid: userid },
+      { projection: { password: 0 } } 
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).json({ error: 'Failed to fetch user' });
+  }
+});
+
 
 
 

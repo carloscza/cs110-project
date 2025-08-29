@@ -47,7 +47,8 @@ nav li
     color: rgb(255, 255, 255) !important;
 }
 
-.nav-link-button {
+.nav-link-button 
+{
   background: none;
   border: none;
   color: rgb(204, 198, 209);
@@ -72,11 +73,57 @@ nav li
 {
     background-color: green;
     border-radius: 2px;
-    padding: 4px;
     font-weight: bolder;
+    padding-left: 6px;
+    padding-right: 8px;
+    padding-bottom: 2px;
     margin-left: 8px;
+    text-align: center;
 }
+
 .post-btn:hover
 {
+    cursor: pointer;
     background-color: rgb(0, 106, 0);
+}
+
+.plus
+{
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-input
+{
+    border-radius: 20px;
+    width: 95px;
+    padding: 2px;
+    padding-left: 6px;
+    outline: none;
+    border: 2px solid transparent;
+    font-size: 10px;
+    background-color: rgb(52, 36, 67);
+    color: rgb(228, 228, 228);
+}
+
+.nav-input:focus
+{
+    background-color: rgb(221, 221, 221);
+    color: black;
+}
+
+.nav-input::placeholder
+{
+    color: rgb(177, 177, 177);
+}
+
+.nav-input:focus::placeholder
+{
+    color: transparent;
+}
+
+.nav-submit-btn
+{
+    display: none;
 }

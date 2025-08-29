@@ -5,34 +5,68 @@ import Review from '../components/ProfileReview';
 import React, { useState, useEffect } from 'react';
 
 function ProfilePage() {
-  const user = JSON.parse(localStorage.getItem('user'));
-  const userId = user?.userid;
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+  const userId = storedUser?.userid;
+  const [user, setUser] = useState(storedUser); // Use state instead of static localStorage
 
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-        fetch(`http://localhost:3001/api/reviews/userid/${userId}`)
-        .then(response => {
-            if (response.ok) {
-                return response.json();
+    if (!userId) return;
+
+    const fetchUserData = async () => {
+      try {
+        // Fetch fresh user data from the server
+        const userResponse = await fetch(`http://localhost:3001/api/user/${userId}`);
+        if (userResponse.ok) {
+          const freshUserData = await userResponse.json();
+          setUser(freshUserData);
+          
+          // Update localStorage with fresh data
+          localStorage.setItem('user', JSON.stringify(freshUserData));
+        }
+
+        // Fetch reviews
+        const reviewsResponse = await fetch(`http://localhost:3001/api/reviews/userid/${userId}`);
+        const reviewsData = reviewsResponse.ok ? await reviewsResponse.json() : [];
+        setReviews(reviewsData);
+
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+        setReviews([]);
+      } finally {
+      }
+    };
+
+    fetchUserData();
+  }, [userId]);
+
+  // Listen for focus event to refresh data when user comes back to the tab
+  useEffect(() => {
+    const handleFocus = () => {
+      if (userId) {
+        fetch(`http://localhost:3001/api/user/${userId}`)
+          .then(response => response.ok ? response.json() : null)
+          .then(data => {
+            if (data) {
+              setUser(data);
+              localStorage.setItem('user', JSON.stringify(data));
             }
-            return [];
-        })
-        .then(data => {
-          setReviews(data);
-        })
-        .catch(error => {
-            console.error('Error fetching reviews:', error);
-            setReviews([]);
-        });
-    }, [userId]);
+          })
+          .catch(error => console.error('Error refreshing user data:', error));
+      }
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, [userId]);
 
   if (!user) {
     return <p>Please log in to view your profile.</p>;
   }
 
   const genUserReviews = reviews.map( (review) => (
-    <Review reviewId={review.reviewid} />
+    <Review key={review.reviewid} reviewId={review.reviewid} />
   ));
 
   return (

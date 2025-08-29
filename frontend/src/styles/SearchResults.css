@@ -1,0 +1,83 @@
+.user-result-container
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2); 
+  justify-content: space-between;
+  border-radius: 5px;
+  padding: 28px;
+  height: 80px;
+  margin-top: 20px;
+}
+
+.userpic-user-res-cont
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-result-text
+{
+  margin: 0;
+}
+
+.user-res-follow-btn
+{
+  border-radius: 5px;
+  outline: none;
+  border: solid 2px transparent;
+  background-color: rgb(69, 38, 140);
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.user-res-following-btn-cont
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border-radius: 5px;
+  height: 40px;
+}
+
+.user-res-following-btn
+{
+  height: 30px;
+  margin: 0;
+  font-size: 16px;
+  color: rgb(136, 136, 136);
+  font-weight: bold;
+}
+
+.user-res-unfollow-btn
+{
+  border-radius: 5px;
+  outline: none;
+  border: solid 2px transparent;
+  background-color: rgb(54, 47, 69);
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.user-res-follow-btn:hover
+{
+  cursor: pointer;
+  background-color: rgb(72, 43, 139);
+}
+
+.user-def
+{
+  font-size: 40px;
+}
+
+.no-user-search-text
+{
+  margin-top: 30px;
+}

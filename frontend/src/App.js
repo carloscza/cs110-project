@@ -12,6 +12,7 @@ import ReviewPage from './containers/ReviewPage';
 import AlbumReviewsPage from './containers/AlbumReviewsPage';
 import PostReviewPage from './containers/PostReviewPage';
 import CreateReviewPage from './containers/CreateReviewPage';
+import SearchResults from './containers/SearchResults';
 
 import profilepic from './profilepic.png';
 
@@ -51,6 +52,8 @@ function App() {
               <Route path="/albumreviewpage/:albumId" element={<AlbumReviewsPage />} />       {/* <-- ADDED */}
               <Route path="/postreview" element={<PostReviewPage />} />       {/* <-- ADDED */}
               <Route path="/createreview/:albumId" element={<CreateReviewPage />} />       {/* <-- ADDED */}
+
+              <Route path="/search/:query" element={<SearchResults />} />       {/* <-- ADDED */}
               
 
             </Routes>

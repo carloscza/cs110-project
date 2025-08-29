@@ -27,7 +27,7 @@ function AlbumReviewsPage()
     }, [albumId]);
 
     const generateReviews = reviews.map( (review) => (
-      <Review reviewId={review.reviewid} />
+      <Review key={review.reviewid} reviewId={review.reviewid} />
     ));
 
   return (

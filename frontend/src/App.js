@@ -13,6 +13,7 @@ import AlbumReviewsPage from './containers/AlbumReviewsPage';
 import PostReviewPage from './containers/PostReviewPage';
 import CreateReviewPage from './containers/CreateReviewPage';
 import SearchResults from './containers/SearchResults';
+import FollowPage from './containers/FollowPage';
 
 import profilepic from './profilepic.png';
 
@@ -41,12 +42,12 @@ function App() {
               <Route path="/" element={<HomePage />} />
 
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile/:userid" element={<ProfilePage />} />
               <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
               <Route path="/signup" element={<Signup setIsLoggedIn={setIsLoggedIn} />} />
 
               <Route path="/activity" element={<ActivityPage />} /> {/* <-- ADDED */}
               <Route path="/posts" element={<PostsPage />} />       {/* <-- ADDED */}
-              <Route path="/profile" element={<ProfilePage profilePic={profilepic} username={"user123"} reviewsCnt={"7"} followersCnt={"1"} followingCnt={"123"} about={"hello trackboxd"} />} />
 
               <Route path="/reviewpage/:reviewId/:albumId" element={<ReviewPage isLoggedIn={isLoggedIn} />} /> {/* <-- ADDED */}
               <Route path="/albumreviewpage/:albumId" element={<AlbumReviewsPage />} />       {/* <-- ADDED */}
@@ -54,6 +55,7 @@ function App() {
               <Route path="/createreview/:albumId" element={<CreateReviewPage />} />       {/* <-- ADDED */}
 
               <Route path="/search/:query" element={<SearchResults />} />       {/* <-- ADDED */}
+              <Route path="/followpage/:userId" element={<FollowPage />} />       {/* <-- ADDED */}
               
 
             </Routes>

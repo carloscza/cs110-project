@@ -2,10 +2,11 @@
 
 import '../styles/SearchResults.css';
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 function SearchResults()
 {
+  const navigate      = useNavigate();
   const currUser      = JSON.parse(localStorage.getItem('user'));
   const currUserId    = currUser?.userid;
   const { query }     = useParams();
@@ -71,21 +72,25 @@ function SearchResults()
     }
   };
 
-  const genUsersResults = res.map( (user) => {
-    const isFollowing = user.followers && user.followers.includes(currUserId);
-    const isSelf = user.userid === currUserId;
+  const handleUserClick = (userId) => {
+    navigate(`/profile/${userId}`);
+  };
 
-    return (
-      <div key={user._id} className="user-result-container">
-        <div className='userpic-user-res-cont'>
-          { user.userpic === "" ? ( <i className="bi bi-person-circle user-def"></i> ) : ( user.userpic) }
-          <p className='user-result-text'>{user.username}</p>
+  const genUsersResults = res.map( (user) => {
+      const isFollowing = user.followers && user.followers.includes(currUserId);
+      const isSelf = user.userid === currUserId;
+
+      return (
+        <div key={user._id} className="user-result-container">
+          <div className='userpic-user-res-cont' onClick={() => handleUserClick(user.userid)}>
+            { user.userpic === "" ? ( <i className="bi bi-person-circle user-def"></i> ) : ( user.userpic) }
+            <p className='user-result-text'>{user.username}</p>
+          </div>
+          { isSelf ? (<></>) 
+              : isFollowing ? ( <button className='user-res-unfollow-btn' onClick={() => handleFollowToggle(user.userid, true)}>unfollow</button> ) 
+                  : ( <button className='user-res-follow-btn' onClick={() => handleFollowToggle(user.userid, false)}>follow</button> ) }
         </div>
-        { isSelf ? (<></>) 
-            : isFollowing ? ( <button className='user-res-unfollow-btn' onClick={() => handleFollowToggle(user.userid, true)}>unfollow</button> ) 
-                : ( <button className='user-res-follow-btn' onClick={() => handleFollowToggle(user.userid, false)}>follow</button> ) }
-      </div>
-    );
+      );
   });
 
   return (

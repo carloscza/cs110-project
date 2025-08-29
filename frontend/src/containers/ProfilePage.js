@@ -1,51 +1,52 @@
-
 import '../styles/ProfilePage.css'; 
-
 import Review from '../components/ProfileReview';
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import defaultpic from '../defaultpic.png';
 
-function ProfilePage() {
-  const storedUser = JSON.parse(localStorage.getItem('user'));
-  const userId = storedUser?.userid;
-  const [user, setUser] = useState(storedUser); // Use state instead of static localStorage
+function ProfilePage() 
+{
+  const navigate = useNavigate();
+  const { userid }   = useParams();
+  const storedUser   = JSON.parse(localStorage.getItem('user'));
+  const userId       = storedUser?.userid;
+  const targetUserId = userid ? parseInt(userid) : userId;
+  const isOwnProfile = targetUserId === userId;
 
+  const [user, setUser]       = useState(isOwnProfile ? storedUser : null); 
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!targetUserId) return;
 
     const fetchUserData = async () => {
       try {
-        // Fetch fresh user data from the server
-        const userResponse = await fetch(`http://localhost:3001/api/user/${userId}`);
+        const userResponse = await fetch(`http://localhost:3001/api/user/${targetUserId}`);
         if (userResponse.ok) {
           const freshUserData = await userResponse.json();
           setUser(freshUserData);
           
-          // Update localStorage with fresh data
-          localStorage.setItem('user', JSON.stringify(freshUserData));
+          // Update localStorage with latest data
+          if (isOwnProfile) { localStorage.setItem('user', JSON.stringify(freshUserData)); }
         }
-
-        // Fetch reviews
-        const reviewsResponse = await fetch(`http://localhost:3001/api/reviews/userid/${userId}`);
+        // Fetch profile user's reviews
+        const reviewsResponse = await fetch(`http://localhost:3001/api/reviews/userid/${targetUserId}`);
         const reviewsData = reviewsResponse.ok ? await reviewsResponse.json() : [];
         setReviews(reviewsData);
-
       } catch (error) {
         console.error('Error fetching profile data:', error);
         setReviews([]);
       } finally {
       }
     };
-
     fetchUserData();
-  }, [userId]);
+  }, [targetUserId]);
 
-  // Listen for focus event to refresh data when user comes back to the tab
+  // Refresh data when user comes back to the tab
   useEffect(() => {
     const handleFocus = () => {
-      if (userId) {
-        fetch(`http://localhost:3001/api/user/${userId}`)
+      if (targetUserId) {
+        fetch(`http://localhost:3001/api/user/${targetUserId}`)
           .then(response => response.ok ? response.json() : null)
           .then(data => {
             if (data) {
@@ -56,25 +57,26 @@ function ProfilePage() {
           .catch(error => console.error('Error refreshing user data:', error));
       }
     };
-
     window.addEventListener('focus', handleFocus);
     return () => window.removeEventListener('focus', handleFocus);
-  }, [userId]);
+  }, [targetUserId]);
 
-  if (!user) {
-    return <p>Please log in to view your profile.</p>;
-  }
+  if (!user) { return <p>Please log in to view your profile.</p>; }
 
   const genUserReviews = reviews.map( (review) => (
     <Review key={review.reviewid} reviewId={review.reviewid} />
   ));
+
+  const handleUserFollowClick = (userId) => {
+      navigate(`/followpage/${userId}`);
+  };
 
   return (
     <div className="profile-container">
       <div className="profile-header-container">
         <div className="user">
           <img
-            src={user.userpic || 'defaultpic.png'} 
+            src={user.userpic === "" ? defaultpic : user.userpic} 
             alt="profilepic"
             className="profile-pic"
           />
@@ -85,11 +87,11 @@ function ProfilePage() {
             <p className="profile-bold-text">{reviews.length}</p>
             <p className="stat-text">reviews</p>
           </div>
-          <div className="statss">
+          <div className="statss" onClick={handleUserFollowClick}>
             <p className="profile-bold-text">{user.followers?.length || 0}</p>
             <p className="stat-text">followers</p>
           </div>
-          <div className="statss">
+          <div className="statss" onClick={handleUserFollowClick}>
             <p className="profile-bold-text">{user.following?.length || 0}</p>
             <p className="stat-text">following</p>
           </div>

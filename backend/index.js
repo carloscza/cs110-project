@@ -304,14 +304,11 @@ app.get('/api/reviews/albumid/:albumid', async (req, res) => {
 app.get('/api/reviews/userid/:userid', async (req, res) => {
   try {
     const collection = db.collection('reviews');
-    const userid = parseInt(req.params.userid); 
+    const userid = parseInt(req.params.userid, 10);
     const reviews = await collection.find({ userid }).toArray();
 
-    if (reviews.length === 0) {
-      return res.status(404).json({ message: 'No reviews found for this user.' });
-    }
-
-    res.json(reviews);
+    // Always return a 200 status—even if reviews list is empty
+    res.status(200).json(reviews);
   } catch (err) {
     console.error('Error fetching reviews by userid:', err);
     res.status(500).json({ error: 'Failed to fetch reviews by userid' });
@@ -821,6 +818,9 @@ app.get('/api/user/:userid', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch user' });
   }
 });
+
+
+
 
 
 

@@ -1,0 +1,118 @@
+.create-review-page-cont
+{
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  gap: 36px;
+  margin-top: 40px;
+}
+
+.create-review-album-cover
+{
+  height: 300px;
+  margin: 0;
+}
+
+.create-review-album-cover-icon
+{
+  font-size: 250px;
+  margin: 0;
+}
+
+.create-review-details-cont
+{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+}
+
+.review-input-cont
+{
+  display: flex;
+  flex-direction: column;
+}
+
+.create-review-text
+{
+  text-align: left;
+  font-weight: bold;
+}
+
+.create-review-title
+{
+  font-size: 24px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.review-rating
+{
+  width: 80px;
+  resize: none;
+  outline: none;
+  padding: 8px;
+  padding-left: 10px;
+  border-radius: 5px;
+}
+
+.review-rating::placeholder
+{
+    color: rgb(177, 177, 177);
+}
+.review-rating:focus::placeholder
+{
+  color: transparent;
+}
+
+.review-textarea
+{
+  width: 350px;
+  resize: none;
+  outline: none;
+  padding: 8px;
+  padding-left: 10px;
+  border-radius: 5px;
+}
+
+.review-textarea::placeholder
+{
+    color: rgb(177, 177, 177);
+}
+.review-textarea:focus::placeholder
+{
+  color: transparent;
+}
+
+.label-text
+{
+  font-weight: bold;
+}
+
+.create-review-submit
+{
+  border: transparent;
+  border-radius: 5px;
+  font-weight: bold;
+  background-color: green;
+  color: white;
+  padding: 8px;
+}
+
+.create-review-submit:hover
+{
+  cursor: pointer;
+  background-color: rgb(20, 134, 20);
+}
+
+.create-review-form
+{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+}

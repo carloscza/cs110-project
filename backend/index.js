@@ -696,10 +696,6 @@ app.get('/api/albums/search-suggest/:query', async (req, res) => {
 });
 
 
-
-
-
-
 // POST follow/unfollow user endpoint
 app.post('/api/users/follow', async (req, res) => {
   const { currentUserId, targetUserId, action } = req.body;
@@ -819,10 +815,52 @@ app.get('/api/user/:userid', async (req, res) => {
   }
 });
 
+// POST create a new review
+app.post('/api/reviews', async (req, res) => {
+  try {
+    const { albumid, userid, rating, review } = req.body;
 
+    if (!albumid || !userid || rating === undefined || !review) {
+      return res.status(400).json({
+        error: 'Missing required fields',
+        required: ['albumid', 'userid', 'rating', 'review']
+      });
+    }
 
+    if (rating < 0 || rating > 100) { return res.status(400).json({error: 'Rating must be between 0 and 100'});}
 
+    let reviewid = 1;
+    try {
+      const reviewCount = await db.collection('reviews').countDocuments();
+      reviewid = reviewCount + 1;
+    } catch (reviewIdError) { console.error('Error getting review count:', reviewIdError);}
 
+    const newReview = {
+      reviewid,
+      albumid: parseInt(albumid),
+      userid: parseInt(userid),
+      rating: parseInt(rating),
+      review: review.trim()
+    };
+
+    const result = await db.collection('reviews').insertOne(newReview);
+    if (result.acknowledged) {
+      res.status(201).json({
+        message: 'Review created successfully',
+        review: {
+          _id: result.insertedId,
+          ...newReview
+        }
+      });
+    } else {
+      res.status(500).json({ error: 'Failed to create review' });
+    }
+
+  } catch (error) {
+    console.error('Error creating review:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 

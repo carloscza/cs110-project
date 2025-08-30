@@ -2,7 +2,8 @@
 
 import '../styles/AlbumList.css';
 
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Entry({key, albumId, albumCover, rating, reviewsa}) {
     const navigate = useNavigate();
@@ -26,6 +27,10 @@ function Entry({key, albumId, albumCover, rating, reviewsa}) {
                     <p className="list-text">{reviewsa}</p>
                 </div>
             </div>
+
+            <Link to={`/albums/${albumId}`} onClick={e => e.stopPropagation()} className="view-details-link">
+                View Details
+            </Link>
         </div>
     );
 }

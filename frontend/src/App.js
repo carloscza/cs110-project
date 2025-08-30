@@ -21,6 +21,8 @@ import Login from './pages/Auth/Login';
 import Signup from './pages/Auth/Signup';
 import React, { useState, useEffect } from 'react';
 
+import AlbumDetailPage from './components/AlbumDetailPage';  
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -56,6 +58,7 @@ function App() {
 
               <Route path="/search/:query" element={<SearchResults />} />       {/* <-- ADDED */}
               <Route path="/followpage/:userId" element={<FollowPage />} />       {/* <-- ADDED */}
+              <Route path="/albums/:albumId" element={<AlbumDetailPage />} />
               
 
             </Routes>

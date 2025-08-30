@@ -695,6 +695,34 @@ app.get('/api/albums/search-suggest/:query', async (req, res) => {
   }
 });
 
+//recom. alg.
+app.get('/api/albums/recommend/:albumId', async (req, res) => {
+  const albumId = parseInt(req.params.albumId);
+
+  try {
+    const albumsCollection = db.collection('albums');
+
+    const currentAlbum = await albumsCollection.findOne({ albumid: albumId });
+
+    if (!currentAlbum) {
+      return res.status(404).json({ error: 'Album not found' });
+    }
+
+    const recommendations = await albumsCollection.find({
+      albumid: { $ne: albumId },
+      $or: [
+        { genre: currentAlbum.genre },
+        { artist: currentAlbum.artist }
+      ]
+    }).limit(10).toArray();
+
+    res.json(recommendations);
+  } catch (err) {
+    console.error('Error fetching recommendations:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 
 // POST follow/unfollow user endpoint
 app.post('/api/users/follow', async (req, res) => {
